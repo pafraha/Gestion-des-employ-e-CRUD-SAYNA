@@ -1,8 +1,7 @@
 <?php include 'inc/header.php'; ?>
-
     <div class="container-xl">
         <div class="table-responsive">
-            <div class="table-wrapper">
+            <div class="table-wrapper" style="margin-top: 50px">
                 <div class="table-title">
                     <div class="row">
                         <div class="col-sm-6">
@@ -17,7 +16,7 @@
                     <thead>
                     <tr>
                         <th>
-							#
+							Matricule
                         </th>
                         <th>Nom & Prénom</th>
                         <th>Email</th>
@@ -29,12 +28,21 @@
                     <tbody>
 
                     <?php require_once 'inc/config.php';
-                        $query = $pdo->query('SELECT * FROM users ORDER BY name_u ASC')->fetchAll(PDO::FETCH_ASSOC);
-                        $i = 1;
+                        $nTotals = $pdo->query('SELECT * FROM users')->rowCount();
+
+                        $parPages = 10; // Listes des users par pages
+                        $nPages = $nTotals / $parPages; // Nbre des pages
+                        if (isset($_GET['pages']) && is_numeric($_GET['pages'])){
+                            $cPages = $_GET['pages'];
+                        } else {
+                            $cPages = 1;
+                        }
+
+                        $query = $pdo->query('SELECT * FROM users ORDER BY name_u ASC LIMIT '.$parPages * ($cPages - 1).', '.$parPages.'')->fetchAll(PDO::FETCH_ASSOC);
 
                         foreach ($query as $u){ ?>
                             <tr>
-                                <td><?= $i++ ?></td>
+                                <td><?= 'M2021-'.$u['id'] ?></td>
                                 <td><?= $u['name_u'] ?></td>
                                 <td><?= $u['email_u'] ?></td>
                                 <td><?= $u['adress_u'] ?></td>
@@ -96,20 +104,20 @@
                                     </div>
                                 </div>
                             </div>
-
-                        <?php } ?>
+                        <?php }
+                    ?>
                     </tbody>
                 </table>
                 <div class="clearfix">
-                    <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                    <div class="hint-text">Showing <b><?= ($cPages * 10) ?></b> out of <b><?= $nTotals ?></b> totals</div>
                     <ul class="pagination">
-                        <li class="page-item disabled"><a href="#">Previous</a></li>
-                        <li class="page-item"><a href="#" class="page-link">1</a></li>
-                        <li class="page-item"><a href="#" class="page-link">2</a></li>
-                        <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                        <li class="page-item"><a href="#" class="page-link">4</a></li>
-                        <li class="page-item"><a href="#" class="page-link">5</a></li>
-                        <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                        <li class="page-item <?= $cPages == 1 ? 'active' : '' ?>"><a class="page-link" href="<?= $cPages > 1 ? '/?pages='.($cPages-1) : '' ?>">Précedent</a></li>
+
+                        <?php for($i = 1; $i <= $nPages; $i++){ ?>
+                            <li class="page-item <?= $cPages == $i ? 'active' : '' ?>"><a href="<?= $cPages == $i ? '' : '/?pages='.$i ?>" class="page-link"><?= $i ?></a></li>
+                        <?php } ?>
+
+                        <li class="page-item <?= $cPages == $nPages ? 'active' : '' ?>"><a class="page-link" href="<?= $cPages < $nPages ? '/?pages='.($cPages+1) : '' ?>">Suivant</a></li>
                     </ul>
                 </div>
             </div>
@@ -139,7 +147,7 @@
                         </div>
                         <div class="form-group">
                             <label>Téléphone</label>
-                            <input type="number" class="form-control" name="phone_u" required>
+                            <input type="text" class="form-control" name="phone_u" required>
                         </div>
                     </div>
                     <div class="modal-footer">

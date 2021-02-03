@@ -40,7 +40,7 @@
     </script>
 </head>
 <body>
-<nav class="navbar navbar-dark bg-dark">
+<nav class="navbar navbar-dark bg-dark fixed-top">
     <a class="navbar-brand" href="#">Gestion des employées</a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
