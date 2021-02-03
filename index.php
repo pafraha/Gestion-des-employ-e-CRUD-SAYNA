@@ -10,7 +10,6 @@
                         </div>
                         <div class="col-sm-6">
                             <a href="#addEModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Nouveau employé-e</span></a>
-                            <a href="#deleteEModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Effacer</span></a>
                         </div>
                     </div>
                 </div>
@@ -18,14 +17,11 @@
                     <thead>
                     <tr>
                         <th>
-							<span class="custom-checkbox">
-								<input type="checkbox" id="selectAll">
-								<label for="selectAll"></label>
-							</span>
+							#
                         </th>
                         <th>Nom & Prénom</th>
                         <th>Email</th>
-                        <th>Adresse</th>
+                        <th>Position</th>
                         <th>Téléphone</th>
                         <th>Actions</th>
                     </tr>
@@ -34,22 +30,18 @@
 
                     <?php require_once 'inc/config.php';
                         $query = $pdo->query('SELECT * FROM users ORDER BY name_u ASC')->fetchAll(PDO::FETCH_ASSOC);
+                        $i = 1;
 
                         foreach ($query as $u){ ?>
                             <tr>
-                                <td>
-                                    <span class="custom-checkbox">
-                                        <input type="checkbox" id="checkbox1" name="options[]" value="1">
-                                        <label for="checkbox1"></label>
-                                    </span>
-                                </td>
+                                <td><?= $i++ ?></td>
                                 <td><?= $u['name_u'] ?></td>
                                 <td><?= $u['email_u'] ?></td>
                                 <td><?= $u['adress_u'] ?></td>
                                 <td><?= $u['phone_u'] ?></td>
                                 <td>
                                     <a href="#" data-target="#editEModal<?= $u['id'] ?>" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                    <a href="" class="delete" onclick="delEmployee(<?= $u['id'] ?>)"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                    <a href="#" data-target="#delEModal<?= $u['id'] ?>" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                 </td>
                             </tr>
 
@@ -72,8 +64,8 @@
                                                     <input type="email" class="form-control" name="email_u" value="<?= $u['email_u'] ?>" required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Adresse</label>
-                                                    <textarea class="form-control" name="adress_u" value="<?= $u['adress_u'] ?>" required></textarea>
+                                                    <label>Position</label>
+                                                    <input type="text" class="form-control" name="adress_u" value="<?= $u['adress_u'] ?>" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Téléphone</label>
@@ -85,6 +77,22 @@
                                                 <input type="submit" class="btn btn-success" value="Modifier">
                                             </div>
                                         </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Delete Modal HTML -->
+                            <div id="delEModal<?= $u['id'] ?>" class="modal fade">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Voulez vous vraiment effacer, <b><?= $u['name_u'] ?></b> dans la liste?</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-outline-primary" data-dismiss="modal">Non</button>
+                                            <a href="inc/del-user.php?ids=<?= $u['id'] ?>" class="btn btn-success">Confirmer</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -126,8 +134,8 @@
                             <input type="email" class="form-control" name="email_u" required>
                         </div>
                         <div class="form-group">
-                            <label>Adresse</label>
-                            <textarea class="form-control" name="adress_u" required></textarea>
+                            <label>Position</label>
+                            <input type="text" class="form-control" name="adress_u" required>
                         </div>
                         <div class="form-group">
                             <label>Téléphone</label>
