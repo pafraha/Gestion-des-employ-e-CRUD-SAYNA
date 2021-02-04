@@ -1,5 +1,6 @@
 <?php
 include_once 'config.php';
+if (!isset($_SESSION)) { session_start(); }
 
 if (!empty($_POST)) {
     $id = isset($_POST['id']) && !empty($_POST['id']) && $_POST['id'] != 'auto' ? $_POST['id'] : NULL;
@@ -13,7 +14,15 @@ if (!empty($_POST)) {
     $stmt = $pdo->prepare('INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)');
     $stmt->execute([$id, $name, $email, $adress, $phone, $created]);
 
-    $msg = 'Nouveau employé-e crée avec succes!';
+    $_SESSION['flash'] = [
+        'msg' => 'Nouveau employé-e crée avec succes!',
+        'type' => 'success'
+    ];
+} else {
+    $_SESSION['flash'] = [
+        'msg' => 'Erreur ! Veuiller verifier votre information',
+        'type' => 'danger'
+    ];
 }
 
 header('Location: ../');

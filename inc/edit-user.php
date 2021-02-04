@@ -9,7 +9,15 @@ if (isset($_GET['id'])) {
     $stmt = $pdo->prepare('UPDATE users SET name_u = ?, email_u = ?, adress_u = ?, phone_u = ? WHERE id = '.$_GET['id']);
     $stmt->execute([$name_u, $email_u, $adress_u, $phone_u]);
 
-    $msg = 'Modification avec succes!';
+    $_SESSION['flash'] = [
+        'msg' => 'Modification avec succes!',
+        'type' => 'success'
+    ];
+} else {
+    $_SESSION['flash'] = [
+        'msg' => 'Erreur ! Veuiller verifier votre information',
+        'type' => 'danger'
+    ];
 }
 
 header('Location: ../');
